@@ -1,76 +1,60 @@
-import {Component} from 'react'
-import {CirclesWithBar as Loader} from 'react-loader-spinner'
+import React, { useState, useEffect } from "react";
+import { CirclesWithBar as Loader } from "react-loader-spinner";
+import TeamCard from "../TeamCard";
+import "./index.css";
 
-import TeamCard from '../TeamCard'
+const teamsApiUrl = "https://apis.ccbp.in/ipl";
 
-import './index.css'
+const Home = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [teamsData, setTeamsData] = useState([]);
 
-const teamsApiUrl = 'https://apis.ccbp.in/ipl'
+  useEffect(() => {
+    const getTeams = async () => {
+      const response = await fetch(teamsApiUrl);
+      const fetchedData = await response.json();
+      const formattedData = fetchedData.teams.map((team) => ({
+        name: team.name,
+        id: team.id,
+        teamImageURL: team.team_image_url,
+      }));
 
-class Home extends Component {
-  state = {
-    isLoading: true,
-    teamsData: [],
-  }
+      setTeamsData(formattedData);
+      setIsLoading(false);
+    };
 
-  componentDidMount() {
-    this.getTeams()
-  }
+    getTeams();
+  }, []);
 
-  getTeams = async () => {
-    const response = await fetch(teamsApiUrl)
-    const fetchedData = await response.json()
-    const formattedData = fetchedData.teams.map(team => ({
-      name: team.name,
-      id: team.id,
-      teamImageURL: team.team_image_url,
-    }))
+  const renderTeamsList = () => (
+    <ul className="teams-list">
+      {teamsData.map((team) => (
+        <TeamCard teamDetails={team} key={team.id} />
+      ))}
+    </ul>
+  );
 
-    this.setState({
-      teamsData: formattedData,
-      isLoading: false,
-    })
-  }
-
-  renderTeamsList = () => {
-    const {teamsData} = this.state
-
-    return (
-      <ul className="teams-list">
-       
-        {teamsData.map(team => (
-          <TeamCard teamDetails={team} key={team.id} />
-        ))}
-      </ul>
-    )
-  }
-
-  renderLoader = () => (
-  
+  const renderLoader = () => (
     <div testid="loader" className="loader-container">
       <Loader type="Oval" color="#ffffff" height={50} />
     </div>
-  )
+  );
 
-  render() {
-    const {isLoading} = this.state
-
-    return (
-      <div className="home-route-container">
-        <div className="teams-list-container">
-          <div className="ipl-dashboard-heading-container">
-            <img
-              src="https://assets.ccbp.in/frontend/react-js/ipl-logo-img.png"
-              alt="ipl logo"
-              className="ipl-logo"
-            />
-            <h1 className="ipl-dashboard-heading">IPL Dashboard</h1>
-          </div>
-          {isLoading ? this.renderLoader() : this.renderTeamsList()}
+  return (
+    <div className="home-route-container">
+      <div className="teams-list-container">
+        <div className="ipl-dashboard-heading-container">
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/ipl-logo-img.png"
+            alt="ipl logo"
+            className="ipl-logo"
+          />
+          <h1 className="ipl-dashboard-heading">IPL Dashboard</h1>
         </div>
+        {isLoading ? renderLoader() : renderTeamsList()}
       </div>
-    )
-  }
-}
+    </div>
+  );
+};
 
-export default Home
+export default Home;

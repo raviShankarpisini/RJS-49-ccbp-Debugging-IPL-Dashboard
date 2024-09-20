@@ -1,20 +1,28 @@
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import "./index.css";
 
-import './index.css'
-
-const TeamCard = props => {
-  const {teamDetails} = props
-  const {name, id, teamImageURL} = teamDetails
+const TeamCard = ({ teamDetails }) => {
+  const { name, id, teamImageURL } = teamDetails;
 
   return (
-  
     <li className="team-item">
-      <Link to={`/team-matches/${id}`} className="link">
-        <img src={teamImageURL} alt={name} className="team-logo" />
+      <Link
+        to={`/team-matches/${id}`}
+        className="link"
+        aria-label={`View matches for ${name}`}
+      >
+        <img
+          src={teamImageURL}
+          alt={name}
+          className="team-logo"
+          onError={(e) => {
+            e.target.src = "path/to/default-image.png";
+          }} // Fallback image
+        />
         <p className="team-name">{name}</p>
       </Link>
     </li>
-  )
-}
+  );
+};
 
-export default TeamCard
+export default TeamCard;

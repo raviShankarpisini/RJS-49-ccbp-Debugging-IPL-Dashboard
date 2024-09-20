@@ -1,7 +1,6 @@
-import './index.css'
+import "./index.css";
 
-const LatestMatch = props => {
-  const {latestMatchData} = props
+const LatestMatch = ({ latestMatchData }) => {
   const {
     competingTeam,
     date,
@@ -12,7 +11,7 @@ const LatestMatch = props => {
     secondInnings,
     manOfTheMatch,
     umpires,
-  } = latestMatchData
+  } = latestMatchData || {};
 
   return (
     <div className="latest-match-container">
@@ -20,31 +19,33 @@ const LatestMatch = props => {
       <div className="latest-match-card">
         <div className="latest-match-details-logo-container">
           <div className="latest-match-details-1">
-            <p className="latest-match-team-name">{competingTeam}</p>
-            <p className="latest-match-date">{date}</p>
-            <p className="match-details">{venue}</p>
-            <p className="match-details">{result}</p>
+            <p className="latest-match-team-name">{competingTeam || "N/A"}</p>
+            <p className="latest-match-date">{date || "N/A"}</p>
+            <p className="match-details">{venue || "N/A"}</p>
+            <p className="match-details">{result || "N/A"}</p>
           </div>
-          <img
-            src={competingTeamLogo}
-            className="latest-match-team-logo"
-            alt={`latest match ${competingTeam}`}
-          />
+          {competingTeamLogo && (
+            <img
+              src={competingTeamLogo}
+              className="latest-match-team-logo"
+              alt={`Latest match ${competingTeam}`}
+            />
+          )}
         </div>
         <hr className="separator" />
         <div className="latest-match-details-2">
           <p className="latest-match-details-label">First Innings</p>
-          <p className="latest-match-details-value">{firstInnings}</p>
+          <p className="latest-match-details-value">{firstInnings || "N/A"}</p>
           <p className="latest-match-details-label">Second Innings</p>
-          <p className="latest-match-details-value">{secondInnings}</p>
+          <p className="latest-match-details-value">{secondInnings || "N/A"}</p>
           <p className="latest-match-details-label">Man Of The Match</p>
-          <p className="latest-match-details-value">{manOfTheMatch}</p>
+          <p className="latest-match-details-value">{manOfTheMatch || "N/A"}</p>
           <p className="latest-match-details-label">Umpires</p>
-          <p className="latest-match-details-value">{umpires}</p>
+          <p className="latest-match-details-value">{umpires || "N/A"}</p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LatestMatch
+export default LatestMatch;
